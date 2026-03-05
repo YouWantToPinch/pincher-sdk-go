@@ -1,4 +1,4 @@
-// Package client handles pincher-api calls
+// Package pinchergo handles pincher-api calls
 package pinchergo
 
 import (
