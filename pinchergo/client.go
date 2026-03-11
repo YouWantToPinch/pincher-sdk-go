@@ -142,7 +142,7 @@ func (c *Client) doRequest(token *string, method, destination string, data, resu
 		// try to send the request.
 		response, err = c.Do(request)
 		if err != nil {
-			return nil
+			return err
 		}
 
 		// If the client is not directed to automatically refres haccess tokens,
