@@ -157,7 +157,7 @@ func EndpointBudgetTransactionDetails(bID, tID string) string {
 }
 
 func EndpointBudgetTransactionSplits(bID, tID string) string {
-	return fmt.Sprintf(URLBudgetTransactionDetails, bID, tID)
+	return fmt.Sprintf(URLBudgetTransactionSplits, bID, tID)
 }
 
 func EndpointBudgetMonth(bID, mID string) string {
