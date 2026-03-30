@@ -40,12 +40,6 @@ func (c *Client) BudgetPayeeUpdate(bID, pID string, data BudgetPayeeUpdateData) 
 	return err
 }
 
-func (c *Client) BudgetPayeeRestore(bID, pID string) error {
-	endpoint := EndpointBudgetPayee(bID, pID)
-	err := c.Request(http.MethodPatch, endpoint, nil, nil)
-	return err
-}
-
 func (c *Client) BudgetPayeeDelete(bID, pID string, data BudgetPayeeDeleteData) error {
 	endpoint := EndpointBudgetPayee(bID, pID)
 	err := c.Request(http.MethodDelete, endpoint, data, nil)

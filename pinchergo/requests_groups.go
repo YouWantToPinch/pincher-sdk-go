@@ -40,12 +40,6 @@ func (c *Client) BudgetGroupUpdate(bID, gID string, data BudgetGroupUpdateData) 
 	return err
 }
 
-func (c *Client) BudgetGroupRestore(bID, gID string) error {
-	endpoint := EndpointBudgetGroup(bID, gID)
-	err := c.Request(http.MethodPatch, endpoint, nil, nil)
-	return err
-}
-
 func (c *Client) BudgetGroupDelete(bID, gID string) error {
 	endpoint := EndpointBudgetGroup(bID, gID)
 	err := c.Request(http.MethodDelete, endpoint, nil, nil)

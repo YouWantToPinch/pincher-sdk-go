@@ -57,12 +57,6 @@ func (c *Client) BudgetCategoryUpdate(bID, cID string, data BudgetCategoryUpdate
 	return err
 }
 
-func (c *Client) BudgetCategoryRestore(bID, cID string) error {
-	endpoint := EndpointBudgetCategory(bID, cID)
-	err := c.Request(http.MethodPatch, endpoint, nil, nil)
-	return err
-}
-
 func (c *Client) BudgetCategoryDelete(bID, cID string) error {
 	endpoint := EndpointBudgetCategory(bID, cID)
 	err := c.Request(http.MethodDelete, endpoint, nil, nil)
