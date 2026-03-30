@@ -33,7 +33,7 @@ func (c *Client) UserLogin(data UserLoginData) (user *User, err error) {
 
 func (c *Client) UserUpdate(data UserUpdateData) error {
 	endpoint := EndpointUsers()
-	err := c.Request(http.MethodPost, endpoint, data, nil)
+	err := c.Request(http.MethodPut, endpoint, data, nil)
 	return err
 }
 
