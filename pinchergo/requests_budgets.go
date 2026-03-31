@@ -23,7 +23,7 @@ func (c *Client) Budget(bID string) (budget *Budget, err error) {
 	return budget, err
 }
 
-func (c *Client) Budgets(bID, urlQuery string) (budgets []*Budget, err error) {
+func (c *Client) Budgets(urlQuery string) (budgets []*Budget, err error) {
 	endpoint := EndpointBudgets() + urlQuery
 	var container budgetContainer
 	err = c.Request(http.MethodGet, endpoint, nil, &container)
