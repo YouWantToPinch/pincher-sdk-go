@@ -48,6 +48,17 @@ func (c *Client) BudgetAccounts(bID, urlQuery string) (accounts []*Account, err 
 	return container.Accounts, err
 }
 
+// BudgetAccountCapital retrieves the total amount tracked
+// by the account specified.
+func (c *Client) BudgetAccountCapital(bID, aID string) (capital int, err error) {
+	endpoint := EndpointBudgetAccountCapital(bID, aID)
+	var response struct {
+		Capital int64 `json:"capital"`
+	}
+	err = c.Request(http.MethodGet, endpoint, nil, &response)
+	return int(response.Capital), err
+}
+
 // BudgetAccountUpdate makes an API call to update an account belonging to
 // the budget identified by the given budget ID with the given data.
 //
