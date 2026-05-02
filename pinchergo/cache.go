@@ -100,9 +100,6 @@ func (c *Cache) Budgets(urlQuery string) []*Budget {
 
 	var budgets []*Budget
 	for _, b := range c.Entries {
-		if urlQuery != b.DestinationURL {
-			continue
-		}
 		if b.DestinationURL != EndpointBudgets()+urlQuery {
 			continue
 		}
@@ -315,10 +312,6 @@ func (c *Cache) addBudget(dest, bID string, budget *Budget) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	if _, ok := c.Entries[bID]; !ok {
-		return
-	}
-
 	c.Entries[bID] = &budgetCache{
 		AccountCache:    map[string]*cacheEntry[Account]{},
 		PayeeCache:      map[string]*cacheEntry[Payee]{},
@@ -364,10 +357,6 @@ func (c *Cache) deleteBudget(bID string) {
 	}
 	c.mu.Lock()
 	defer c.mu.Unlock()
-
-	if _, ok := c.Entries[bID]; !ok {
-		return
-	}
 
 	delete(c.Entries, bID)
 }
