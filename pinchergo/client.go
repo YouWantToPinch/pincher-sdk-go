@@ -355,7 +355,7 @@ type BudgetAccountCreateData struct {
 	AccountType string `json:"account_type"`
 }
 
-type BudgetAccountUpdateData = BudgetAccountCreateData
+type BudgetAccountUpdateData = MetaData
 
 type BudgetAccountDeleteData struct {
 	DeleteHard bool `json:"delete_hard"`
