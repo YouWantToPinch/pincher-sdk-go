@@ -17,15 +17,17 @@ type cacheEntry[T any] struct {
 	URL       string    `json:"url"`        // endpoint via which this entry was acquired
 }
 
+type subcache[T any] map[string]*cacheEntry[T]
+
 // budgetCache is a subcache that stores its own relevant
 // budget resources such as accounts, payees, groups, etc.
 type budgetCache struct {
-	AccountCache    map[string]*cacheEntry[Account]           `json:"account_cache"`
-	PayeeCache      map[string]*cacheEntry[Payee]             `json:"payee_cache"`
-	GroupCache      map[string]*cacheEntry[Group]             `json:"group_cache"`
-	CategoryCache   map[string]*cacheEntry[Category]          `json:"category_cache"`
-	TxnCache        map[string]*cacheEntry[Transaction]       `json:"transaction_cache"`
-	TxnDetailsCache map[string]*cacheEntry[TransactionDetail] `json:"transaction_details_cache"`
+	AccountCache    subcache[Account]           `json:"account_cache"`
+	PayeeCache      subcache[Payee]             `json:"payee_cache"`
+	GroupCache      subcache[Group]             `json:"group_cache"`
+	CategoryCache   subcache[Category]          `json:"category_cache"`
+	TxnCache        subcache[Transaction]       `json:"transaction_cache"`
+	TxnDetailsCache subcache[TransactionDetail] `json:"transaction_details_cache"`
 	budgetEntry     Budget
 	metadata
 }
@@ -694,10 +696,6 @@ func (c *Cache) deleteTxnsDetails(bID, tID string) {
 	delete(c.Entries[bID].TxnDetailsCache, tID)
 }
 
-// ---------------------------
-//  DEPRECATED CACHE FUNCTIONS
-// ---------------------------
-
 // Set copies the input entries map of budgetIDs->budgetCaches
 // to the cache
 func (c *Cache) Set(entries map[string]*budgetCache) {
@@ -716,45 +714,28 @@ func (c *Cache) reapLoop() {
 	}
 }
 
+func reapSubcache[T any](m subcache[T], interval time.Duration) {
+	for k, entry := range m {
+		if time.Since(entry.CreatedAt) > interval {
+			delete(m, k)
+		}
+	}
+}
+
 func (c *Cache) reap() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	// TODO: I know there's a way one can simplify this with
-	// an interface instead of all these multiple loops
-	// FOR EACH subcache, but I was getting errors when
-	// trying...
-
-	for _, bCache := range c.Entries {
-		for aID, entry := range bCache.AccountCache {
-			if time.Since(entry.CreatedAt) > c.interval {
-				delete(bCache.AccountCache, aID)
-			}
-		}
-		for pID, entry := range bCache.PayeeCache {
-			if time.Since(entry.CreatedAt) > c.interval {
-				delete(bCache.PayeeCache, pID)
-			}
-		}
-		for gID, entry := range bCache.GroupCache {
-			if time.Since(entry.CreatedAt) > c.interval {
-				delete(bCache.GroupCache, gID)
-			}
-		}
-		for cID, entry := range bCache.CategoryCache {
-			if time.Since(entry.CreatedAt) > c.interval {
-				delete(bCache.CategoryCache, cID)
-			}
-		}
-		for tID, entry := range bCache.TxnCache {
-			if time.Since(entry.CreatedAt) > c.interval {
-				delete(bCache.TxnCache, tID)
-			}
-		}
-		for tID, entry := range bCache.TxnDetailsCache {
-			if time.Since(entry.CreatedAt) > c.interval {
-				delete(bCache.TxnDetailsCache, tID)
-			}
+	for k, bCache := range c.Entries {
+		if time.Since(bCache.CreatedAt) > c.interval {
+			delete(c.Entries, k)
+		} else {
+			reapSubcache(bCache.AccountCache, c.interval)
+			reapSubcache(bCache.PayeeCache, c.interval)
+			reapSubcache(bCache.GroupCache, c.interval)
+			reapSubcache(bCache.CategoryCache, c.interval)
+			reapSubcache(bCache.TxnCache, c.interval)
+			reapSubcache(bCache.TxnDetailsCache, c.interval)
 		}
 	}
 }
