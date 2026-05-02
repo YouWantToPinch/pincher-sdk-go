@@ -27,31 +27,31 @@ type budgetCache struct {
 }
 
 // GET
-func (c *budgetCache) Budget() *Budget {
+func (c *budgetCache) budget() *Budget {
 	return c.BudgetEntry.Data
 }
 
-func (c *budgetCache) Account(aID string) *Account {
+func (c *budgetCache) account(aID string) *Account {
 	return c.AccountCache[aID].Data
 }
 
-func (c *budgetCache) Payee(pID string) *Payee {
+func (c *budgetCache) payee(pID string) *Payee {
 	return c.PayeeCache[pID].Data
 }
 
-func (c *budgetCache) Group(gID string) *Group {
+func (c *budgetCache) group(gID string) *Group {
 	return c.GroupCache[gID].Data
 }
 
-func (c *budgetCache) Category(cID string) *Category {
+func (c *budgetCache) category(cID string) *Category {
 	return c.CategoryCache[cID].Data
 }
 
-func (c *budgetCache) Transaction(tID string) *Transaction {
+func (c *budgetCache) transaction(tID string) *Transaction {
 	return c.TxnCache[tID].Data
 }
 
-func (c *budgetCache) TransactionDetail(tID string) *TransactionDetail {
+func (c *budgetCache) transactionDetail(tID string) *TransactionDetail {
 	return c.TxnDetailsCache[tID].Data
 }
 
@@ -85,7 +85,7 @@ func (c *Cache) Budget(bID string) *Budget {
 		return nil
 	}
 
-	return b.Budget()
+	return b.budget()
 }
 
 func (c *Cache) Budgets(urlQuery string) []*Budget {
@@ -112,7 +112,7 @@ func (c *Cache) Account(bID, aID string) *Account {
 		return nil
 	}
 
-	return b.Account(aID)
+	return b.account(aID)
 }
 
 func (c *Cache) Accounts(bID, urlQuery string) []*Account {
@@ -144,7 +144,7 @@ func (c *Cache) Payee(bID, pID string) *Payee {
 		return nil
 	}
 
-	return b.Payee(pID)
+	return b.payee(pID)
 }
 
 func (c *Cache) Payees(bID, urlQuery string) []*Payee {
@@ -176,7 +176,7 @@ func (c *Cache) Group(bID, gID string) *Group {
 		return nil
 	}
 
-	return b.Group(gID)
+	return b.group(gID)
 }
 
 func (c *Cache) Groups(bID, urlQuery string) []*Group {
@@ -208,7 +208,7 @@ func (c *Cache) Category(bID, cID string) *Category {
 		return nil
 	}
 
-	return b.Category(cID)
+	return b.category(cID)
 }
 
 func (c *Cache) Categories(bID, urlQuery string) []*Category {
@@ -240,7 +240,7 @@ func (c *Cache) Transaction(bID, tID string) *Transaction {
 		return nil
 	}
 
-	return b.Transaction(tID)
+	return b.transaction(tID)
 }
 
 func (c *Cache) Transactions(bID, urlQuery string) []*Transaction {
@@ -272,7 +272,7 @@ func (c *Cache) TransactionDetails(bID, tID string) *TransactionDetail {
 		return nil
 	}
 
-	return b.TransactionDetail(tID)
+	return b.transactionDetail(tID)
 }
 
 func (c *Cache) TransactionsDetails(bID, urlQuery string) []*TransactionDetail {
