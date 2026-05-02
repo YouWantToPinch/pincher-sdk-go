@@ -9,13 +9,11 @@ import (
 type metadata struct {
 	DestinationURL string    `json:"destination_url"` // request by which this entry was acquired
 	CreatedAt      time.Time `json:"created_at"`      // time at which this entry was created
-	Protected      bool      `json:"protected"`       // whether this entry is protected from the reap loop
 }
 
 type cacheEntry[T any] struct {
 	Data      *T        `json:"data"`
 	CreatedAt time.Time `json:"created_at"` // time at which this entry was created
-	Protected bool      `json:"protected"`  // whether this entry is protected from the reap loop
 	URL       string    `json:"url"`        // endpoint via which this entry was acquired
 }
 
@@ -729,32 +727,32 @@ func (c *Cache) reap() {
 
 	for _, bCache := range c.Entries {
 		for aID, entry := range bCache.AccountCache {
-			if !entry.Protected && (time.Since(entry.CreatedAt) > c.interval) {
+			if time.Since(entry.CreatedAt) > c.interval {
 				delete(bCache.AccountCache, aID)
 			}
 		}
 		for pID, entry := range bCache.PayeeCache {
-			if !entry.Protected && (time.Since(entry.CreatedAt) > c.interval) {
+			if time.Since(entry.CreatedAt) > c.interval {
 				delete(bCache.PayeeCache, pID)
 			}
 		}
 		for gID, entry := range bCache.GroupCache {
-			if !entry.Protected && (time.Since(entry.CreatedAt) > c.interval) {
+			if time.Since(entry.CreatedAt) > c.interval {
 				delete(bCache.GroupCache, gID)
 			}
 		}
 		for cID, entry := range bCache.CategoryCache {
-			if !entry.Protected && (time.Since(entry.CreatedAt) > c.interval) {
+			if time.Since(entry.CreatedAt) > c.interval {
 				delete(bCache.CategoryCache, cID)
 			}
 		}
 		for tID, entry := range bCache.TxnCache {
-			if !entry.Protected && (time.Since(entry.CreatedAt) > c.interval) {
+			if time.Since(entry.CreatedAt) > c.interval {
 				delete(bCache.TxnCache, tID)
 			}
 		}
 		for tID, entry := range bCache.TxnDetailsCache {
-			if !entry.Protected && (time.Since(entry.CreatedAt) > c.interval) {
+			if time.Since(entry.CreatedAt) > c.interval {
 				delete(bCache.TxnDetailsCache, tID)
 			}
 		}
