@@ -37,17 +37,6 @@ func (c *Client) BudgetCategories(bID, urlQuery string) (categories []*Category,
 	return container.Categories, err
 }
 
-type categoryReportsContainer struct {
-	CategoryReports []*CategoryReport `json:"data"`
-}
-
-func (c *Client) BudgetCategoryReports(bID, mID string) (categories []*CategoryReport, err error) {
-	endpoint := EndpointBudgetMonthCategories(bID, mID)
-	var container categoryReportsContainer
-	err = c.Request(http.MethodGet, endpoint, nil, &container)
-	return container.CategoryReports, err
-}
-
 func (c *Client) BudgetCategoryUpdate(bID, cID string, data BudgetCategoryUpdateData) error {
 	endpoint := EndpointBudgetCategory(bID, cID)
 	err := c.Request(http.MethodPut, endpoint, data, nil)

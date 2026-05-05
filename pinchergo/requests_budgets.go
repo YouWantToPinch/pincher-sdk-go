@@ -31,12 +31,6 @@ func (c *Client) Budgets(urlQuery string) (budgets []*Budget, err error) {
 	return container.Budgets, err
 }
 
-func (c *Client) BudgetReport(bID, mID string) (report *MonthReport, err error) {
-	endpoint := EndpointBudgetMonth(bID, mID)
-	err = c.Request(http.MethodGet, endpoint, nil, &report)
-	return report, err
-}
-
 func (c *Client) BudgetUpdate(bID string, data BudgetUpdateData) error {
 	endpoint := EndpointBudget(bID)
 	err := c.Request(http.MethodPut, endpoint, data, nil)
