@@ -62,6 +62,8 @@ const (
 	URLBudgetMonth               = URLBudgetMonths + sVerb
 	URLBudgetMonthCategories     = URLBudgetMonth + "/categories"
 	URLBudgetMonthCategory       = URLBudgetMonthCategories + sVerb
+	URLBudgetMonthGroups         = URLBudgetMonth + "/groups"
+	URLBudgetMonthGroup          = URLBudgetMonthGroups + sVerb
 )
 
 func EndpointServerReadiness() string {
@@ -170,4 +172,12 @@ func EndpointBudgetMonthCategories(bID, mID string) string {
 
 func EndpointBudgetMonthCategory(bID, mID, cID string) string {
 	return fmt.Sprintf(URLBudgetMonthCategory, bID, mID, cID)
+}
+
+func EndpointBudgetMonthGroups(bID, mID string) string {
+	return fmt.Sprintf(URLBudgetMonthGroups, bID, mID)
+}
+
+func EndpointBudgetMonthGroup(bID, mID, gID string) string {
+	return fmt.Sprintf(URLBudgetMonthGroup, bID, mID, gID)
 }
