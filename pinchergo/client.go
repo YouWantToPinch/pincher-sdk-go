@@ -145,6 +145,11 @@ func (c *Client) doRequest(token *string, method, destination string, data, resu
 			return err
 		}
 
+		// If the response isn't a 401, we don't care to retry with a new access token
+		if response.StatusCode != http.StatusUnauthorized {
+			break
+		}
+
 		// If the client is not directed to automatically refres haccess tokens,
 		// then we won't try in the first place.
 		if !c.autoRefresh {
@@ -155,10 +160,8 @@ func (c *Client) doRequest(token *string, method, destination string, data, resu
 		// we need to check whether or not it concerns an expired access token.
 		tokenExpired, err := checkTokenExpired(*token)
 
-		// if it isn't a 401, we don't care to retry with a new access token
-		if response.StatusCode != http.StatusUnauthorized ||
-			// if no token was required for the request, we don't care
-			*token == "" ||
+		// if no token was required for the request, we don't care
+		if *token == "" ||
 			// if the token is not expired, the 401 has nothing to do with tokens
 			(!tokenExpired && err == nil) {
 			break
